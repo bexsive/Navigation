@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Meechu</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="login_btn_label">Login</string>
+    <string name="sign_up_text">New User? SignUp</string>
+    <string name="prompt_name">Name</string>
+    <string name="prompt_con_password">Confirm Password</string>
+    <string name="reg_bn_label">Register</string>
+</resources>
