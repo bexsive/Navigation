@@ -10,4 +10,7 @@
     <string name="prompt_name">Name</string>
     <string name="prompt_con_password">Confirm Password</string>
     <string name="reg_bn_label">Register</string>
+
+
+    <string name="google_place_api">AIzaSyB74G8MWNZ9SjY46NDXgc-L_irETJiT-cE</string>
 </resources>
