@@ -40,11 +40,11 @@ public class BackgroundTask extends AsyncTask<String, Void, String> {
     AlertDialog.Builder builder;
     ProgressDialog progressDialog;
 
+
     public BackgroundTask(Context ctx){
 
         this.ctx = ctx;
         activity = (Activity)ctx;
-
     }
 
     @Override
@@ -136,7 +136,7 @@ public class BackgroundTask extends AsyncTask<String, Void, String> {
 
                 }
                 httpURLConnection.disconnect();
-                Thread.sleep(5000);
+                Thread.sleep(1000);
                 return stringBuilder.toString().trim();
 
 
@@ -151,10 +151,7 @@ public class BackgroundTask extends AsyncTask<String, Void, String> {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
-
         }
-
         return null;
     }
 
@@ -169,7 +166,7 @@ public class BackgroundTask extends AsyncTask<String, Void, String> {
 
         try {
             progressDialog.dismiss();
-            //JSONObject jsonObject = new JSONObject(json);
+
             JSONObject jsonObject = new JSONObject(json.substring(json.indexOf("{"), json.lastIndexOf("}") + 1));
             JSONArray jsonArray = jsonObject.getJSONArray("server_response");
             JSONObject JO = jsonArray.getJSONObject(0);
@@ -186,21 +183,20 @@ public class BackgroundTask extends AsyncTask<String, Void, String> {
             }
             else if(code.equals("login_true")) {
 
+
                 Intent intent = new Intent(activity, HomeActivity.class);
                 intent.putExtra("message", message);
-                activity.startActivity(intent);
 
+                activity.startActivity(intent);
             }
 
             else if (code.equals("login_false")){
                 showDialog("Login Error", message, code);
-
             }
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
     }
 
     public void showDialog(String title, String message, String code){
@@ -234,12 +230,8 @@ public class BackgroundTask extends AsyncTask<String, Void, String> {
 
                 }
             });
-
         }
-
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
-
-
     }
 }

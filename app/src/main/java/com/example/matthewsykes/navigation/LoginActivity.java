@@ -47,9 +47,8 @@ public class LoginActivity extends AppCompatActivity {
                 else{
 
                     BackgroundTask backgroundTask = new BackgroundTask(LoginActivity.this);
-                    backgroundTask.execute("login",Email.getText().toString(), Pass.getText().toString());
+                    backgroundTask.execute("login", Email.getText().toString(), Pass.getText().toString());
                 }
-
             }
         });
 

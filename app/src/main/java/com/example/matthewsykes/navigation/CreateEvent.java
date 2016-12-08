@@ -1,10 +1,8 @@
 package com.example.matthewsykes.navigation;
 
 import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
-import android.icu.text.DateFormat;
 import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -22,16 +20,17 @@ import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 
-import java.util.Locale;
 
 public class CreateEvent extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
-    private static final int PLACE_PICKER_REQUEST=1;
+    private static final int PLACE_PICKER_REQUEST = 1;
 
     int year, month, day, hour, min;
     int fyear, fmonth, fday, fhour, fmin;
     TextView showTime, showDate, showDestination;
-    Button destinationButton, timePickerButton, datePickerButton;
+    Button destinationButton, timePickerButton, datePickerButton, submitButton;
+
+    String result;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,11 +40,11 @@ public class CreateEvent extends AppCompatActivity implements DatePickerDialog.O
         destinationButton = (Button) findViewById(R.id.destinationButton);
         showDestination = (TextView) findViewById(R.id.showDestination);
 
-        timePickerButton = (Button)findViewById(R.id.timePickerButton);
+        timePickerButton = (Button) findViewById(R.id.timePickerButton);
         showTime = (TextView) findViewById(R.id.showTime);
 
-        datePickerButton = (Button)findViewById(R.id.datePickerButton);
-        showDate = (TextView)findViewById(R.id.showDate);
+        datePickerButton = (Button) findViewById(R.id.datePickerButton);
+        showDate = (TextView) findViewById(R.id.showDate);
 
         destinationButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,13 +58,13 @@ public class CreateEvent extends AppCompatActivity implements DatePickerDialog.O
 
                 } catch (GooglePlayServicesRepairableException e) {
                     e.printStackTrace();
-                } catch (GooglePlayServicesNotAvailableException e){
+                } catch (GooglePlayServicesNotAvailableException e) {
                     e.printStackTrace();
                 }
             }
         });
 
-        timePickerButton.setOnClickListener(new View.OnClickListener(){
+        timePickerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Calendar c = Calendar.getInstance();
@@ -77,7 +76,7 @@ public class CreateEvent extends AppCompatActivity implements DatePickerDialog.O
             }
         });
 
-        datePickerButton.setOnClickListener(new View.OnClickListener(){
+        datePickerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Calendar c = Calendar.getInstance();
@@ -89,13 +88,24 @@ public class CreateEvent extends AppCompatActivity implements DatePickerDialog.O
                 datePickerDialog.show();
             }
         });
+
+        submitButton = (Button) findViewById(R.id.returnHomeButton);
+        submitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra("result", result);
+                setResult(HomeActivity.RESULT_OK, returnIntent);
+                finish();
+            }
+        });
     }
 
     @Override
     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
 
         fyear = i;
-        fmonth = i1+1;
+        fmonth = i1 + 1;
         fday = i2;
 
         showDate.setText(fmonth + " / " + fday + " / " + fyear);
@@ -111,29 +121,16 @@ public class CreateEvent extends AppCompatActivity implements DatePickerDialog.O
 
     }
 
-    /*
-            protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-                super.onActivityResult(requestCode, resultCode, data);
-                if (resultCode == RESULT_OK) {
-                    switch (requestCode) {
-                        case PLACE_PICKER_REQUEST:
-                            Place place = PlacePicker.getPlace(data, this);
-                            get_place.setText(place.getName() + ", " + place.getAddress());
-                            break;
-                    }
-                }
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PLACE_PICKER_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                Place place = PlacePicker.getPlace(this, data);
+                String toastMsg = String.format("Place: %s", place.getName());
+                showDestination.setText(toastMsg);
+                Toast.makeText(this, toastMsg, Toast.LENGTH_LONG).show();
             }
-            */
-protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    if (requestCode == PLACE_PICKER_REQUEST) {
-        if (resultCode == RESULT_OK) {
-            Place place = PlacePicker.getPlace(this, data);
-            String toastMsg = String.format("Place: %s", place.getName());
-            showDestination.setText(toastMsg);
-            Toast.makeText(this, toastMsg, Toast.LENGTH_LONG).show();
         }
     }
-}
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

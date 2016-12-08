@@ -16,6 +16,7 @@ import android.widget.Button;
 public class MeetMeFragment extends Fragment {
 
     Button button;
+    static int requestCode = 1;
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -26,11 +27,23 @@ public class MeetMeFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(getActivity(), CreateEvent.class);
-                    startActivity(intent);
+                    startActivityForResult(intent, requestCode);
                 }
             });
 
             return view;
 
         }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1) {
+            if(resultCode == HomeActivity.RESULT_OK){
+                String result = data.getStringExtra("result");
+            }
+            if (resultCode == HomeActivity.RESULT_CANCELED) {
+                //Write your code if there's no result
+            }
+        }
+    }
 }

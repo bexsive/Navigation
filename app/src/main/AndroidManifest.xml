@@ -22,14 +22,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
-            <meta-data
-                android:name="com.google.android.geo.API_KEY"
-                android:value="@string/google_place_api"/>
-
         </activity>
         <activity android:name=".RegisterActivity" />
         <activity android:name=".HomeActivity" />
-        <activity android:name=".CreateEvent"></activity>
+        <activity android:name=".CreateEvent"/>
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_place_api"/>
 
 
     </application>

@@ -11,6 +11,7 @@
     <string name="prompt_con_password">Confirm Password</string>
     <string name="reg_bn_label">Register</string>
 
+    <string name="json_string">{"server_response":[{"name":"Matthew","email":"Matthew.sykes@hotmail.com","mobile":"4084990485"},{"name":"bob","email":"bob@gmail.com","mobile":"8887771515"}]}</string>
 
     <string name="google_place_api">AIzaSyB74G8MWNZ9SjY46NDXgc-L_irETJiT-cE</string>
 </resources>

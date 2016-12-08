@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent" android:layout_height="fill_parent">
+
+    <ImageView
+        android:id="@+id/profile_pic"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp" />
+
+    <TextView
+        android:id="@+id/member_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@+id/profile_pic"
+        android:paddingBottom="10dp"
+        android:text="User Name"
+        android:textSize="20sp" />
+
+    <TextView
+
+        android:id="@+id/timeOfEvent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/member_name"
+        android:layout_alignBottom="@+id/member_name"
+        android:layout_alignParentRight="true"
+        android:text=" Date and time of event"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/eventDistance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/member_name"
+        android:layout_below="@+id/member_name"
+        android:text="Distance to event"
+        android:textSize="16sp" />
+
+    <TextView
+
+        android:id="@+id/totalAttending"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/eventDistance"
+        android:layout_alignBottom="@+id/eventDistance"
+        android:layout_alignParentRight="true"
+        android:text=" Attending if >1"
+        android:textSize="16sp" />
+
+
+</RelativeLayout>
