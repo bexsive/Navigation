@@ -1,79 +1,92 @@
 package com.example.matthewsykes.navigation;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import android.content.Intent;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Matthew Sykes on 11/6/2016.
  */
 
-public class EventAdapter extends ArrayAdapter {
+public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHolder> {
 
-    List list = new ArrayList();
+    ArrayList<Event> events = new ArrayList<Event>();
+    Context ctx;
 
-    public EventAdapter(Context context, int resource) {
-        super(context, resource);
+    public EventAdapter(ArrayList<Event> events, Context ctx){
+        this.events = events;
+        this.ctx = ctx;
     }
 
     @Override
-    public void add(Object object) {
-        super.add(object);
-        list.add(object);
+    public EventViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.event_view_layout, parent, false);
+        EventViewHolder eventViewHolder = new EventViewHolder(view, ctx, events);
+        return eventViewHolder;
     }
 
     @Override
-    public int getCount() {
-        return list.size();
+    public void onBindViewHolder(EventViewHolder holder, int position) {
+
+        //TODO: Thia ia where the JSON is bound to the card list items
+        Event EVNT = events.get(position);
+        holder.profile_pic.setImageResource(EVNT.getImage_id());
+        holder.member_name.setText(EVNT.getUserName());
+        holder.dateOfEvent.setText(EVNT.getDate());
+        holder.timeOfEvent.setText(EVNT.getTime());
+
+
     }
 
-    @Nullable
     @Override
-    public Object getItem(int position) {
-        return list.get(position);
+    public int getItemCount() {
+        return events.size();
     }
 
-    @NonNull
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        View row;
-        row = convertView;
-        EventHolder eventHolder;
+    public static class EventViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        if(row == null){
-            LayoutInflater layoutInflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            row = layoutInflater.inflate(R.layout.row_layout, parent, false);
-            eventHolder = new EventHolder();
-            eventHolder.txt_name = (TextView) row.findViewById(R.id.member_name);
-            // Change this when I add separate TextView for date/time
-            eventHolder.txt_date = (TextView) row.findViewById(R.id.eventDistance);
-            eventHolder.txt_time = (TextView) row.findViewById(R.id.timeOfEvent);
-            row.setTag(eventHolder);
+        ImageView profile_pic;
+        TextView member_name, dateOfEvent, timeOfEvent;
+        ArrayList<Event> events = new ArrayList<Event>();
+        Context ctx;
+
+
+        public EventViewHolder(View view, Context ctx, ArrayList<Event> events){
+            super(view);
+            this.events = events;
+            this.ctx = ctx;
+            view.setOnClickListener(this);
+
+            //TODO: Thia ia where the mapping of variables go to XML layout items
+
+            profile_pic = (ImageView)view.findViewById(R.id.profile_pic);
+            member_name = (TextView) view.findViewById(R.id.member_name);
+            dateOfEvent = (TextView) view.findViewById(R.id.dateOfEvent);
+            timeOfEvent = (TextView) view.findViewById(R.id.timeOfEvent);
         }
-        else {
-            eventHolder = (EventHolder) row.getTag();
+
+        @Override
+        public void onClick(View v){
+            int position = getAdapterPosition();
+            Event event = this.events.get(position);
+
+            Intent intent = new Intent(this.ctx, EventDetails.class);
+            intent.putExtra("img_id", event.getImage_id());
+            intent.putExtra("member_name", event.getUserName());
+            intent.putExtra("date", event.getDate());
+            intent.putExtra("time", event.getTime());
+            this.ctx.startActivity(intent);
+
+
+
         }
-
-        Event event = (Event) this.getItem(position);
-
-        eventHolder.txt_name.setText(event.getUserName());
-        eventHolder.txt_date.setText(event.getDate());
-        eventHolder.txt_time.setText(event.getTime());
-
-
-
-        return row;
-    }
-
-    static class EventHolder{
-        TextView txt_name, txt_date, txt_time;
     }
 }

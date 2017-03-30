@@ -1,9 +1,12 @@
 package com.example.matthewsykes.navigation;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.icu.util.Calendar;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -19,6 +22,21 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.android.gms.maps.model.LatLng;
+
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLEncoder;
 
 
 public class CreateEvent extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
@@ -26,11 +44,9 @@ public class CreateEvent extends AppCompatActivity implements DatePickerDialog.O
     private static final int PLACE_PICKER_REQUEST = 1;
 
     int year, month, day, hour, min;
-    int fyear, fmonth, fday, fhour, fmin;
+    String location_name, location_address, location_phone, location_lat, location_long, date, time;
     TextView showTime, showDate, showDestination;
     Button destinationButton, timePickerButton, datePickerButton, submitButton;
-
-    String result;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,7 +110,9 @@ public class CreateEvent extends AppCompatActivity implements DatePickerDialog.O
             @Override
             public void onClick(View v) {
                 Intent returnIntent = new Intent();
-                returnIntent.putExtra("result", result);
+                PostEventToServer postEventToServer = new PostEventToServer(CreateEvent.this);
+                postEventToServer.execute(location_name, location_address, location_phone, location_lat, location_long, date, time);
+
                 setResult(HomeActivity.RESULT_OK, returnIntent);
                 finish();
             }
@@ -104,19 +122,22 @@ public class CreateEvent extends AppCompatActivity implements DatePickerDialog.O
     @Override
     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
 
-        fyear = i;
-        fmonth = i1 + 1;
-        fday = i2;
+        year = i;
+        month = i1 + 1;
+        day = i2;
 
-        showDate.setText(fmonth + " / " + fday + " / " + fyear);
+        date = month + " / " + day + " / " + year;
+
+        showDate.setText(date);
     }
 
     @Override
     public void onTimeSet(TimePicker timePicker, int i, int i1) {
-        fhour = i;
-        fmin = i1;
+        hour = i;
+        min = i1;
 
-        showTime.setText(fhour + ":" + fmin);
+        time = hour + ":" + min;
+        showTime.setText(time);
 
 
     }
@@ -125,6 +146,15 @@ public class CreateEvent extends AppCompatActivity implements DatePickerDialog.O
         if (requestCode == PLACE_PICKER_REQUEST) {
             if (resultCode == RESULT_OK) {
                 Place place = PlacePicker.getPlace(this, data);
+                location_name = place.getName().toString();
+                location_address = place.getAddress().toString();
+                location_phone = place.getPhoneNumber().toString();
+                LatLng queriedLocation = place.getLatLng();
+                Double l1 = queriedLocation.latitude;
+                Double l2 = queriedLocation.longitude;
+                location_lat = l1.toString();
+                location_long = l2.toString();
+
                 String toastMsg = String.format("Place: %s", place.getName());
                 showDestination.setText(toastMsg);
                 Toast.makeText(this, toastMsg, Toast.LENGTH_LONG).show();
@@ -153,4 +183,86 @@ public class CreateEvent extends AppCompatActivity implements DatePickerDialog.O
 
         return super.onOptionsItemSelected(item);
     }
+
+    public class PostEventToServer extends AsyncTask<String, Void, String>{
+
+        Context ctx;
+        Activity activity;
+
+        public PostEventToServer(Context ctx){
+            this.ctx = ctx;
+            activity = (Activity)ctx;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                URL url = new URL("http://inertiamobility.com/events/addEvent.php");
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.setDoOutput(true);
+                httpURLConnection.setDoInput(true);
+
+                OutputStream outputStream = httpURLConnection.getOutputStream();
+                BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
+                String location_name = params[0];
+                String location_address = params[1];
+                String location_phone = params[2];
+                String location_lat = params[3];
+                String location_long = params[4];
+                String date = params[5];
+                String time = params[6];
+                String data = URLEncoder.encode("location_name", "UTF-8")+"="+ URLEncoder.encode(location_name, "UTF-8")+"&"+
+                        URLEncoder.encode("location_address", "UTF-8")+"="+ URLEncoder.encode(location_address, "UTF-8")+"&"+
+                        URLEncoder.encode("location_phone", "UTF-8")+"="+ URLEncoder.encode(location_phone, "UTF-8")+"&"+
+                        URLEncoder.encode("location_lat", "UTF-8")+"="+ URLEncoder.encode(location_lat, "UTF-8")+"&"+
+                        URLEncoder.encode("location_long", "UTF-8")+"="+ URLEncoder.encode(location_long, "UTF-8")+"&"+
+                        URLEncoder.encode("date", "UTF-8")+"="+ URLEncoder.encode(date, "UTF-8")+"&"+
+                        URLEncoder.encode("time", "UTF-8")+"="+ URLEncoder.encode(time, "UTF-8");
+                bufferedWriter.write(data);
+                bufferedWriter.flush();
+                bufferedWriter.close();
+                outputStream.close();
+
+                InputStream inputStream = httpURLConnection.getInputStream();
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+                StringBuilder stringBuilder = new StringBuilder();
+                String line = "";
+                while((line = bufferedReader.readLine())!=null){
+
+                    stringBuilder.append(line+"\n");
+
+                }
+                httpURLConnection.disconnect();
+                Thread.sleep(2000);
+                return stringBuilder.toString().trim();
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return null;
+
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+        }
+    }
+
+
 }

@@ -1,37 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
     >
-
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
+    <android.support.v7.widget.RecyclerView
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="58dp"
-        android:text="Where is everyone?"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-
-        android:layout_gravity="center" />
-
-    <ListView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/friend_feed_listView"
+        android:id="@+id/friend_feed_recyclerView"
         >
 
-
-    </ListView>
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Sync"
-        android:layout_gravity="center"
-        android:id="@+id/syncButton"
-        />
-
-</LinearLayout>
+    </android.support.v7.widget.RecyclerView>
+</RelativeLayout>

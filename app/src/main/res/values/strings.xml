@@ -14,4 +14,40 @@
     <string name="json_string">{"server_response":[{"name":"Matthew","email":"Matthew.sykes@hotmail.com","mobile":"4084990485"},{"name":"bob","email":"bob@gmail.com","mobile":"8887771515"}]}</string>
 
     <string name="google_place_api">AIzaSyB74G8MWNZ9SjY46NDXgc-L_irETJiT-cE</string>
+
+    <string-array name="person_name">
+        <item>"Rajmohan"</item>
+        <item>"Vineeth S"</item>
+        <item>"Aju Dev"</item>
+        <item>"Rupesh R K"</item>
+        <item>"Ambili Dev"</item>
+        <item>"Reshmi Prabeesh"</item>
+        <item>"Ribin"</item>
+        <item>"Nisha Sujith"</item>
+        <item>"Melvin"</item>
+    </string-array>
+
+    <string-array name="person_email">
+        <item>"Rajmohan@abc.com"</item>
+        <item>"Vineeth@xyz.com"</item>
+        <item>"ajudev@pqw.com"</item>
+        <item>"abbili@xyz.com"</item>
+        <item>"reshmi@abc.com"</item>
+        <item>"ribini@jlk.com"</item>
+        <item>"nisha@pqr.com"</item>
+        <item>"melvin@abc.com"</item>
+        <item>"sooraj@abc.com"</item>
+    </string-array>
+
+    <string-array name="person_mobile">
+        <item>"0987654321"</item>
+        <item>"1234567890"</item>
+        <item>"1233456123"</item>
+        <item>"1234567890"</item>
+        <item>"5687334590"</item>
+        <item>"0987653451"</item>
+        <item>"1234567123"</item>
+        <item>"5687334590"</item>
+        <item>"0987654321"</item>
+    </string-array>
 </resources>

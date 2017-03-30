@@ -16,7 +16,7 @@ import java.net.URL;
 
 public class SyncListView extends AsyncTask<Void, Void, String> {
 
-    String json_url = "http://statuspros.cloud/FriendFeed/json_get_data.php";
+    String json_url = "http://InertiaMobility.com/FriendFeed/json_get_data.php";
     String JSON_STRING;
 
     @Override
